@@ -28,6 +28,7 @@ HardwareSerial Serial_two(2);
 HardwareSerial* COM[NUM_COM] = {&Serial, &Serial_one , &Serial_two};
 
 #define MAX_NMEA_CLIENTS 4
+#define PACKET_SIZE 50
 #ifdef PROTOCOL_TCP
 #include <WiFiClient.h>
 WiFiServer server_0(SERIAL1_TCP_PORT);
@@ -178,8 +179,8 @@ void loop()
            
         if(TCPClient.available()) 
         {
-          
-          while(TCPClient.available() && i1 < (bufferSize - 1))
+          i1 = 0;
+          while(TCPClient.available() && i1 < PACKET_SIZE)
           {
             buf1[i1] = TCPClient.read(); // read char from client (LK8000 app)
             i1++;
@@ -187,31 +188,32 @@ void loop()
           // Serial.println("\nTest.");
           // Serial.write(buf1[num], i1[num]);
           // COM[0]->write(buf1, i1);
-          COM[1]->write(buf1, i1); // now send to UART(num):
-          i1 = 0;
+          COM[1]->write(buf1, PACKET_SIZE); // now send to UART(num):
+          
         }
       
   
       if(COM[1]->available())
       {
-        while(COM[1]->available() && i2 < 3)
+        i2 = 0;
+        while(COM[1]->available() && i2 < PACKET_SIZE)
         {     
           buf2[i2] = COM[1]->read(); // read char from UART(num)
-          COM[0]->write(buf2, 3);
+          // COM[0]->write(buf2, PACKET_SIZE);
           ///Debug
           // COM[0]->write(buf2[i2]);
           i2++;
         }
-          COM[0]->write(buf2, 3);
+          // COM[0]->write(buf2, PACKET_SIZE);
           if(TCPClient)                     
-            TCPClient.write(buf2, i2);
+            TCPClient.write(buf2, PACKET_SIZE);
         
 #ifdef BLUETOOTH        
         // now send to Bluetooth:
         if(SerialBT.hasClient())      
           SerialBT.write(buf2[num], i2[num]);               
 #endif  
-        i2 = 0;
+        
       }
     }    
   

@@ -33,7 +33,7 @@ IPAddress netmask(255, 255, 255, 0);
 /*************************  COM Port 0 *******************************/
 #define UART_BAUD0 1843200            // Baudrate UART0
 #define SERIAL_PARAM0 SERIAL_8N1    // Data/Parity/Stop UART0
-#define SERIAL0_RXPIN 21            // receive Pin UART0
+#define SERIAL0_RXPIN 3            // receive Pin UART0
 #define SERIAL0_TXPIN 1             // transmit Pin UART0
 #define SERIAL0_TCP_PORT 8880       // Wifi Port UART0
 /*************************  COM Port 1 *******************************/
